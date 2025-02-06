@@ -1,4 +1,6 @@
-﻿class Program
+﻿using System.Runtime.Intrinsics.Arm;
+
+class Program
 {
     static void Main(string[] args)
     {
@@ -7,6 +9,12 @@
 
         // Registrera en ny menu service
         dependencyProvider.Register(new DefaultMenuService());
+
+        // Registrera andra dependencies vi behöver i programmet
+        dependencyProvider.Register(new ListUserRepository());
+        dependencyProvider.Register(new DefaultUserService(dependencyProvider));
+        dependencyProvider.Register(new ListNoteRepository());
+        dependencyProvider.Register(new DefaultNoteService(dependencyProvider));
 
         // Hämta ut menu service implementationen och sätt start menyn till LoginMenu
         IMenuService menuService = dependencyProvider.Get<IMenuService>();

@@ -11,9 +11,17 @@ public class LoginCommand : Command
         Console.Write("Enter a password: ");
         string password = Console.ReadLine()!;
 
-        Console.WriteLine("TODO: Logged in");
-
         IMenuService menuService = Get<IMenuService>();
-        menuService.SetMenu(new MainMenu(dependencyProvider));
+        IUserService userService = Get<IUserService>();
+        try
+        {
+            User user = userService.Login(username, password);
+            Console.WriteLine($"Success! Logged in as user '{user.Name}'");
+            menuService.SetMenu(new MainMenu(dependencyProvider));
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine("Error: " + exception.Message);
+        }
     }
 }

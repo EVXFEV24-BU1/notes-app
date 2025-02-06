@@ -11,8 +11,20 @@ public class RegisterUserCommand : Command
         Console.Write("Enter a password: ");
         string password = Console.ReadLine()!;
 
-        Console.WriteLine("TODO: Registered user with name and password");
+        Console.Write("Enter your birth date: ");
+        string birthString = Console.ReadLine()!;
+
+        DateTime birthDate = DateTime.Parse(birthString);
+
         IUserService userService = Get<IUserService>();
-        userService.Register();
+        try
+        {
+            User user = userService.Register(username, password, birthDate);
+            Console.WriteLine($"Success! Regisered user with name '{user.Name}'");
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine("Error: " + exception.Message);
+        }
     }
 }
