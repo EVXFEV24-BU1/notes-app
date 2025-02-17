@@ -1,5 +1,7 @@
 // Basklassen för alla user repositories. Fördelen med detta är att vi enkelt
 // kan bygga ut med andra repositories, t.ex för databaser som vi kommer att göra vecka 2.
+using Microsoft.EntityFrameworkCore;
+
 public interface IUserRepository
 {
     void Save(User user);
@@ -36,5 +38,37 @@ public class ListUserRepository : IUserRepository
         {
             users[index] = user;
         }
+    }
+}
+
+public class PostgresUserRepository : IUserRepository
+{
+    public User? GetById(Guid id)
+    {
+        using AppContext context = new AppContext();
+        return context
+            .Users.Include(u => u.Notes)
+            .Where(user => user.Id.Equals(id))
+            .FirstOrDefault();
+    }
+
+    public User? GetByName(string name)
+    {
+        using AppContext context = new AppContext();
+        return context
+            .Users.Include(u => u.Notes)
+            .Where(user => user.Name.Equals(name))
+            .FirstOrDefault();
+    }
+
+    public void Save(User user)
+    {
+        using AppContext context = new AppContext();
+        if (GetById(user.Id) == null)
+        {
+            context.Users.Add(user);
+        }
+
+        context.SaveChanges();
     }
 }

@@ -1,7 +1,7 @@
-public class CreateNoteCommand : Command
+public class ViewNoteCommand : Command
 {
-    public CreateNoteCommand(DependencyProvider dependencyProvider)
-        : base("create-note", "Create and save a new note.", dependencyProvider) { }
+    public ViewNoteCommand(DependencyProvider dependencyProvider)
+        : base("view-note", "View the details and content of a note.", dependencyProvider) { }
 
     public override void Execute()
     {
@@ -23,13 +23,22 @@ public class CreateNoteCommand : Command
             return;
         }
 
-        Console.Write("Enter content: ");
-        string content = Console.ReadLine()!;
-
         try
         {
-            Note note = noteService.CreateNote(title, content, user);
-            Console.WriteLine($"Saved note with title '{note.Title}'");
+            Note? note = noteService.GetByTitleAndUserId(title, user.Id);
+            if (note == null)
+            {
+                Console.WriteLine($"No such note exists.");
+            }
+            else
+            {
+                Console.WriteLine($"Note: {note.Title}");
+                Console.WriteLine($"Owner: {note.User.Name}");
+                Console.WriteLine(
+                    $"Update dates: {string.Join(", ", note.UpdateHistoryDates.Select(date => date.ToShortDateString()))}"
+                );
+                Console.WriteLine($"\n{note.Content}");
+            }
         }
         catch (Exception exception)
         {

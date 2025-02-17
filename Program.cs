@@ -1,6 +1,4 @@
-﻿using System.Runtime.Intrinsics.Arm;
-
-class Program
+﻿class Program
 {
     static void Main(string[] args)
     {
@@ -11,9 +9,11 @@ class Program
         dependencyProvider.Register(new DefaultMenuService());
 
         // Registrera andra dependencies vi behöver i programmet
-        dependencyProvider.Register(new ListUserRepository());
+        dependencyProvider.Register(new PostgresUserRepository());
+        //dependencyProvider.Register(new ListUserRepository());
         dependencyProvider.Register(new DefaultUserService(dependencyProvider));
-        dependencyProvider.Register(new ListNoteRepository());
+        dependencyProvider.Register(new PostgresNoteRepository());
+        //dependencyProvider.Register(new ListNoteRepository());
         dependencyProvider.Register(new DefaultNoteService(dependencyProvider));
 
         // Hämta ut menu service implementationen och sätt start menyn till LoginMenu

@@ -6,12 +6,14 @@ public class Note
     public List<DateTime> UpdateHistoryDates { get; set; }
     public User User { get; set; }
 
-    public Note(string title, string content, User user)
+    public Note(string title, string content)
     {
         this.Id = Guid.NewGuid();
         this.Title = title;
         this.Content = content;
-        this.UpdateHistoryDates = [DateTime.Now];
-        this.User = user;
+        this.UpdateHistoryDates = [DateTime.UtcNow];
+        this.User = null!;
     }
+
+    public Note() { }
 }

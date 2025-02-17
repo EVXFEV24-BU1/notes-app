@@ -4,6 +4,7 @@ public class MainMenu : Menu
     {
         this.RegisterCommand(new CreateNoteCommand(dependencyProvider));
         this.RegisterCommand(new ListNotesCommand(dependencyProvider));
+        this.RegisterCommand(new ViewNoteCommand(dependencyProvider));
     }
 
     public override void Display()

@@ -15,6 +15,7 @@ public class RegisterUserCommand : Command
         string birthString = Console.ReadLine()!;
 
         DateTime birthDate = DateTime.Parse(birthString);
+        birthDate = DateTime.SpecifyKind(birthDate, DateTimeKind.Utc);
 
         IUserService userService = Get<IUserService>();
         try
@@ -25,6 +26,10 @@ public class RegisterUserCommand : Command
         catch (Exception exception)
         {
             Console.WriteLine("Error: " + exception.Message);
+            if (exception.InnerException != null)
+            {
+                Console.WriteLine("Inner exception: " + exception.InnerException.Message);
+            }
         }
     }
 }

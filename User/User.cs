@@ -14,4 +14,6 @@ public class User
         this.BirthDate = birthDate;
         this.Notes = new List<Note>();
     }
+
+    public User() { }
 }
