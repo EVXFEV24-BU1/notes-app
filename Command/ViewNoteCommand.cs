@@ -1,3 +1,4 @@
+[MenuCommand(typeof(MainMenu))]
 public class ViewNoteCommand : Command
 {
     public ViewNoteCommand(DependencyProvider dependencyProvider)

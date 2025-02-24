@@ -1,3 +1,4 @@
+[MenuCommand(typeof(MainMenu))]
 public class CreateNoteCommand : Command
 {
     public CreateNoteCommand(DependencyProvider dependencyProvider)

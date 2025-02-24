@@ -1,3 +1,4 @@
+[MenuCommand(typeof(LoginMenu))]
 public class LoginCommand : Command
 {
     public LoginCommand(DependencyProvider dependencyProvider)

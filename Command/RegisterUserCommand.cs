@@ -1,3 +1,4 @@
+[MenuCommand(typeof(LoginMenu))]
 public class RegisterUserCommand : Command
 {
     public RegisterUserCommand(DependencyProvider dependencyProvider)

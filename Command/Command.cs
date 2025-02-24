@@ -25,3 +25,14 @@ public abstract class Command
     // Alla kommandon gör olika saker och då används denna metod
     public abstract void Execute();
 }
+
+[AttributeUsage(AttributeTargets.Class)]
+public class MenuCommandAttribute : Attribute
+{
+    public Type MenuType { get; }
+
+    public MenuCommandAttribute(Type menuType)
+    {
+        this.MenuType = menuType;
+    }
+}
