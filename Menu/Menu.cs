@@ -1,8 +1,32 @@
+using System.Reflection;
+
 // Basklassen för alla menyer
 // Den innehåller kommandon som tillhör menyn
 public abstract class Menu
 {
     private List<Command> commands = new List<Command>();
+
+    public Menu(DependencyProvider dependencyProvider)
+    {
+        AppDomain domain = AppDomain.CurrentDomain;
+        Assembly[] assemblies = domain.GetAssemblies();
+
+        foreach (Assembly assembly in assemblies)
+        {
+            Type[] types = assembly.GetTypes();
+
+            foreach (Type type in types)
+            {
+                if (type.IsSubclassOf(typeof(Command)))
+                {
+                    Console.WriteLine(type.FullName);
+                    Command command = (Command)Activator.CreateInstance(type, dependencyProvider);
+
+                    RegisterCommand(command);
+                }
+            }
+        }
+    }
 
     // Registrera ett kommandon för menyn, detta görs i menyns constructor (se LoginMenu för ett exempel)
     public void RegisterCommand(Command command)
