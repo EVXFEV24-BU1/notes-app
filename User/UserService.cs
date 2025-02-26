@@ -1,3 +1,6 @@
+using System.Security.Cryptography;
+using System.Text;
+
 public interface IUserService
 {
     User? GetLoggedInUser();
@@ -38,7 +41,13 @@ public class DefaultUserService : IUserService
             throw new KeyNotFoundException("Wrong username or password.");
         }
 
-        if (!user.Password.Equals(password))
+        string[] passwordParts = user.Password.Split(":");
+        string passwordHash = passwordParts[0];
+        string salt = passwordParts[1];
+
+        string userProvidedPasswordHash = HashPassword(password, salt);
+
+        if (!passwordHash.Equals(userProvidedPasswordHash))
         {
             throw new ArgumentException("Wrong username or password.");
         }
@@ -75,8 +84,38 @@ public class DefaultUserService : IUserService
             throw new ArgumentException("Password must be at least 5 characters.");
         }
 
+        string salt = GenerateSalt();
+        password = HashPassword(password, salt);
+        password += ":" + salt;
+
         User user = new User(username, password, birthDate);
         userRepository.Save(user);
         return user;
+    }
+
+    private string HashPassword(string password, string salt)
+    {
+        byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+        byte[] fullBytes = passwordBytes.Concat(Encoding.UTF8.GetBytes(salt)).ToArray();
+
+        StringBuilder sb = new StringBuilder();
+        using (HashAlgorithm algorithm = SHA256.Create())
+        {
+            byte[] hash = algorithm.ComputeHash(fullBytes);
+            foreach (byte b in hash)
+                sb.Append(b.ToString("X2"));
+        }
+
+        return sb.ToString();
+    }
+
+    private string GenerateSalt()
+    {
+        StringBuilder sb = new StringBuilder();
+        byte[] salt = RandomNumberGenerator.GetBytes(16);
+        foreach (byte b in salt)
+            sb.Append(b.ToString("X2"));
+
+        return sb.ToString();
     }
 }

@@ -7,6 +7,7 @@ public class AppContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
-        builder.UseNpgsql("Host=localhost;Database=notes;Username=postgres;Password=password");
+        var connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
+        builder.UseNpgsql(connectionString);
     }
 }
